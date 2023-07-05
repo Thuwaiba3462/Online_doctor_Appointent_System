@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin</title>
+	<link rel="stylesheet" type="text/css" href="style4.css">
+</head>
+<body class="Abody">
+	<div class="Aheader">
+	<h2>Admin Login</h2>
+</div>
+
+<form id="loginForm" class="Aform">
+
+	<div class="input-groupA">
+		<label>Admin ID</label>
+		<input type="number" name="admin_id" id="admin_id">
+
+	</div>
+
+	<div class="input-groupA">
+		<label>Password</label>
+		<input type="Password" name="apassword" id="apassword">
+
+	<div class="input-groupA">
+		<button type="submit" name="Login3" class="btnA"> Login</button>
+	</div>
+</form>
+ <script>
+
+// Admin login
+const loginForm= document.getElementById('loginForm');
+  loginForm.addEventListener('submit',(event)=>{
+    event.preventDefault();
+
+    const admin_id=document.getElementById('admin_id').value;
+    const apassword=document.getElementById('apassword').value;
+    fetch('http://localhost:7080/api/admin/get')
+      .then(response=>response.json())
+      .then(data=>{
+        const match=data.find(user=>user.admin_id==admin_id && user.apassword==apassword);
+        if(match){
+          alert('Successfull login');
+          window.location.href='index2.html';
+        }
+
+        else{
+          alert('Wrong username or password');
+        }
+      
+      })
+      .catch(error=>{
+        console.error('error',error);
+        alert('An error occour during login');
+      });
+
+  });
+
+
+
+
+
+
+
+
+ </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Doctor</title>
+	<link rel="stylesheet"  href="style6.css">
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+	<nav>
+		<ul> 
+			<!-- <li><a href="index2.html">My Info</a></li> -->
+			<li><a href="doctorapp.html">My Appointments</a></li>
+			<li><a href="searchpatient.html">Search Patient</a></li>
+			<!-- <li><a href="add.html">Add Description</a></li> -->
+			<li><a href="Doctorpatient.html">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+<br><br>
+<body>
+	<form id="search" class="patientsearch">
+		<div class="input-group">
+			<label style="font-weight: bold; font-size: 30px">Search By:</label>
+			<label style="font-weight: bold">*Patient ID</label>
+			<label style="font-weight: bold">*Patient Name</label>
+			<input type="text" name="PID" >
+		</div>
+		<div class="input-group">
+			<button type="submit" name="SearchP" class="btn">Search</button>
+		</div>
+	</form>
+<br><br>
+	<table class="table3">
+		<caption style="margin-left: 34px;padding: 10px;font-weight: bold;font-size: 30px;" class="asd">Patient Information</caption>
+		<thead>
+			<tr>
+				<th>PatientID</th>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Contact Number</th>
+				<th>Email</th>
+				<th>BloodGroup</th>
+			</tr>
+
+		</thead>
+		<tbody id="patientTableBody">
+
+		</tbody>
+		
+	</table>
+
+<script>
+// 	fetch("http://localhost:7080/api/patient/list")
+//   .then((response) => {
+//     if (response.ok) {
+//       return response.json();
+//     }
+//     throw new Error("Network response not ok.");
+//   })
+//   .then((DATA) => {
+//     let info = "";
+//     DATA.forEach((item) => {
+//       info += `
+//         <tr>
+//           <td>${item.p_id}</td>
+//           <td>${item.name}</td>
+//           <td>${item.address}</td>
+// 		  <td>${item.contact}</td>
+// 		  <td>${item.email}</td>
+// 		  <td>${item.bloodtype}</td>
+		  
+		  
+//           <td>
+//             <button id="acceptBtn" class="accept-btn">Accept</button>
+//             <button id="rejectBtn">Reject</button>
+//           </td>
+//         </tr>
+//       `;
+//     });
+//     document.getElementById('search').innerHTML = info;
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
+
+
+
+
+
+
+
+
+  document.getElementById('search').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Get the input values
+  const patientId = document.getElementById('p_id').value;
+ const patientName = document.getElementById('name').value;
+
+  // Perform the search based on the selected criteria
+  if (patientId !== '') {
+    searchPatientById(patientId);
+  } else if (patientName !== '') {
+    searchPatientByName(patientName);
+  } else {
+    // Handle case when no search criteria is provided
+    alert('Please enter either Patient ID or Patient Name.');
+  }
+});
+
+function searchPatientById(patientId) {
+  // Make an AJAX request to search patient by ID
+  fetch(`http://localhost:7080/api/patient/get?id=${p_id}`)
+    .then(response => response.json())
+    .then(data => {
+      // Process the response data
+      console.log('Patient found:', data);
+      // Perform further actions with the patient data, e.g., update UI
+    })
+    .catch(error => {
+      console.error('Error searching patient:', error);
+      // Handle the error, e.g., show an error message
+    });
+}
+
+function searchPatientByName(patientName) {
+  // Make an AJAX request to search patient by name
+  fetch(`http://localhost:7080/api/patient/get?name=${name}`)
+    .then(response => response.json())
+    .then(data => {
+      // Process the response data
+      console.log('Patients found:', data);
+      // Perform further actions with the patients data, e.g., update UI
+    })
+    .catch(error => {
+      console.error('Error searching patients:', error);
+      // Handle the error, e.g., show an error message
+    });
+}
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

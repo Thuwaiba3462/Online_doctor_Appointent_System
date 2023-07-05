@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Patient</title>
+	<link rel="stylesheet"  href="style2.css">
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+	<nav>
+		<ul> 
+			<!-- <li><a href="index.html">MyInfo</a></li> -->
+			<li><a href="book.html">Book Appointment</a></li>
+			<li><a href="view.html">View Appointment</a></li>
+			<li><a href="cancel.html">Cancel Booking</a></li>
+			<li><a href="searchdoctor.html">Search Doctor</a></li>
+			<li><a href="Doctorpatient.html">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+
+<body>
+	<div class="header">
+		<h2>Book Appointment</h2>
+	</div>
+
+	<form id="appointmentForm">
+		<div class="input-group">
+				<label for="doctor">Doctor:</label>
+      <select id="doctor" name="doctor"class="xd" required>
+      </select>
+	  <label for="doctor">Patient:</label>
+      <select id="patient" name="patient"class="xd" required>
+      </select>
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" class="xd" required>
+
+      <label for="time">Time:</label>
+      <input type="time" id="time" name="time"  class="xd"required>
+
+      
+      
+		</div>
+
+		<div class="input-group">
+			<button type="submit" name="Search" class="btn">Book </button>
+		</div>
+	</form>
+	<script>
+
+		//To add doctor in dropdown
+fetch('http://localhost:7080/api/doctor/get')
+.then(function(response){
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Network response not ok.');
+})
+.then(function(doctorArray){
+  // Get the select element
+  var dropdown = document.getElementById('doctor');
+  
+  // Iterate over the doctor array and create an option for each doctor
+  doctorArray.forEach(function(doctor) {
+    var option = document.createElement('option');
+    option.value = doctor.d_id;
+    option.text = doctor.name;
+    
+    // Append the option to the select element
+    dropdown.appendChild(option);
+  });
+  
+  })
+  .catch(function(error){
+    console.error('Error:',error)
+});
+
+
+//patien dropdown
+		//To add doctor in dropdown
+		fetch('http://localhost:7080/api/patient/get')
+.then(function(response){
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Network response not ok.');
+})
+.then(function(patientArray){
+  // Get the select element
+  var dropdown = document.getElementById('patient');
+  
+  // Iterate over the doctor array and create an option for each doctor
+  patientArray.forEach(function(patient) {
+    var option = document.createElement('option');
+    option.value = patient.p_id;
+    option.text = patient.name;
+    
+    // Append the option to the select element
+    dropdown.appendChild(option);
+  });
+  
+  })
+  .catch(function(error){
+    console.error('Error:',error)
+});
+
+
+
+
+
+//submit appointment
+const form = document.getElementById('appointmentForm');
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  let name = document.getElementById('doctor').value;
+  let Pname = document.getElementById('patient').value;
+  let dateInput = document.getElementById('date').value;
+  let timeInput = document.getElementById('time').value;
+
+  // Format the date value as "YYYY-MM-DD"
+  let dateParts = dateInput.split('-');
+  let year = parseInt(dateParts[0], 10);
+  let month = parseInt(dateParts[1], 10);
+  let day = parseInt(dateParts[2], 10);
+  let date = year.toString() + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+
+  // Format the time value as "HH:mm:ss"
+  let timeParts = timeInput.split(':');
+  let hours = parseInt(timeParts[0], 10);
+  let minutes = parseInt(timeParts[1], 10);
+  let seconds = 0; 
+  let time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+
+  const appointmentData = {
+    doctor: { d_id: name },
+    patient: { p_id: Pname },
+    date: date,
+    time: time
+  };
+
+  fetch('http://localhost:7080/api/appointment/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(appointmentData)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Created successfully', data);
+      alert("Appointment created successfully");
+      window.location.href = 'book.html';
+    })
+    .catch(error => {
+      console.error('Error creating appointment', error);
+    });
+});
+
+	</script>
+</body>
+</html>

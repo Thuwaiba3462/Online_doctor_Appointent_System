@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Doctor</title>
+	<link rel="stylesheet" type="text/css" href="style3.css">
+</head>
+<body class="Dbody">
+	<div class="Dheader">
+		<h2>Doctor Login</h2>
+	</div>
+
+	<form id="loginForm" class="Dform">
+
+		<div class="input-groupD">
+			<label>Username</label>
+			<input type="text" name="name" id="name">
+		</div>
+
+		<div class="input-groupD">
+			<label>Password</label>
+			<input type="Password" name="password" id="password">
+		</div>
+
+		<div class="input-groupD">
+			<button type="submit" name="Login2" class="btnD"> Login</button>
+		</div>
+
+	</form>
+
+
+
+    <script>
+        
+//Doctor login
+const loginForm= document.getElementById('loginForm');
+  loginForm.addEventListener('submit',(event)=>{
+    event.preventDefault();
+
+    const name=document.getElementById('name').value;
+    const password=document.getElementById('password').value;
+    fetch('http://localhost:7080/api/doctor/get')
+      .then(response=>response.json())
+      .then(data=>{
+        const match=data.find(user=>user.name==name && user.password==password);
+        if(match){
+          alert('Successfull login');
+          window.location.href='index2.html';
+        }
+
+        else{
+          alert('Wrong username or password');
+        }
+      
+      })
+      .catch(error=>{
+        console.error('error',error);
+        alert('An error occour during login');
+      });
+
+  });
+    </script>
+</body>
+</html>

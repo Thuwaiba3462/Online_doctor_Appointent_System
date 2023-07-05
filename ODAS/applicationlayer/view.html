@@ -1,0 +1,82 @@
+<?php include '../../datalayer/bookserver.php'; ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Patient</title>
+	<link rel="stylesheet"  href="style2.css">
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+	<nav>
+		<ul> 
+			<!-- <li><a href="index.html">MyInfo</a></li> -->
+			<li><a href="book.html">Book Appointment</a></li>
+			<li><a href="view.html">View Appointment</a></li>
+			<li><a href="cancel.html">Cancel Booking</a></li>
+			<li><a href="searchdoctor.html">Search Doctor</a></li>
+			<li><a href="Doctorpatient.html">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+
+<body>
+	<h1 class="my">My<span class="mys">Appointment</span></h1>
+
+	<table class="table2">
+		<thead>
+		<tr>
+			<th>Appointment ID</th>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Doctor ID</th>
+			<th>action</th>
+		</tr>
+	</thead>
+		<tbody id="appointment">
+				
+                    
+				</tbody >  
+			
+		
+		
+	</table>
+
+	<script>
+		
+
+		fetch("http://localhost:7080/api/appointment/list")
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error("Network response not ok.");
+  })
+  .then((DATA) => {
+    let info = "";
+    DATA.forEach((item) => {
+      info += `
+        <tr>
+		<td>${item.patient.p_id}</td>
+		<td>${item.date}</td>
+		<td>${item.time}</td>
+        <td>${item.doctor.d_id}</td>
+       
+		  
+		  
+          <td>
+            <button id="acceptBtn" class="accept-btn">Accept</button>
+            <button id="rejectBtn">Reject</button>
+          </td>
+        </tr>
+      `;
+    });
+    document.getElementById('appointment').innerHTML = info;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+	</script>
+</body>
+</html>

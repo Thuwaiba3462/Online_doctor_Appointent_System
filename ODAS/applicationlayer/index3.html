@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin</title>
+	<link rel="stylesheet"  href="style7.css" type="text/css">
+
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+	<nav>
+		<ul> 
+			<li><a href="index3.html">Add/Delete Doctor</a></li>
+			<li><a href="viewdoctor.html">View Doctors</a></li>
+			<li><a href="viewpatients.html">View Patients</a></li>
+			<li><a href="viewappointments.html">View Appointments</a></li>
+			<li><a href="feedback.html">FeedBack</a></li>
+			<li><a href="Doctorpatient.html">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+
+<body>
+	<div class="headerA">
+		<h2>Add Doctor</h2>
+	</div>
+
+	<form id="registrationForm" >
+		<div class="input-groupA">
+			<label>Doctor ID</label>
+			<input type="text" name="a_id" id="d_id">
+		</div>
+
+		<div class="input-groupA">
+			<label>Doctor Name</label>
+			<input type="text" name="name" id="name">
+		</div>
+
+		<div class="input-groupA">
+			<label>Address</label>
+			<input type="text" name="address" id="address">
+		</div>
+
+		<div class="input-groupA">
+			<label>Contact Number</label>
+			<input type="text" name="contact" id="contact">
+		</div>
+
+		<div class="input-groupA">
+			<label>Email address</label>
+			<input type="text" name="email" id="password">
+		</div>
+
+		<div class="input-groupA">
+			<label>Password</label>
+			<input type="text" name="password" id="password">
+		</div>
+
+		<div class="input-groupA">
+			<label>Category</label>
+			<select name="category" class="xd" id="category">
+				<option value="bone">bones</option>
+				<option value="heart">heart</option>
+				<option value="Dentistry">Dentistry</option>
+				<option value="MentalHealth">Mental Health</option>
+				<option value="Surgery">Surgery</option>
+			</select>
+		</div>
+
+		<div class="input-groupA">
+			<button type="submit" name="Add" class="btnA">Add Doctor</button>
+		</div>
+	</form>
+
+	<div class="headerAD">
+		<h2>Delete Doctor</h2>
+	</div>
+
+	<form id="delete" class="delete">
+		<div class="input-groupA">
+			<label>Doctor ID</label>
+			<input type="text" name="d_id">
+		</div>
+
+		<div class="input-groupA">
+			<button type="submit" name="Delete" class="btnA">Delete</button>
+		</div>
+	</form>
+
+	
+    <script>
+        // add docor
+       const form=document.getElementById('registrationForm');
+       form.addEventListener('submit',(event)=>{
+        event.preventDefault();
+        let d_id=document.getElementById('d_id');
+        let Category=document.getElementById('category');
+        let address=document.getElementById('address');
+        let name=document.getElementById('name');
+        let email=document.getElementById('email');
+        let contact=document.getElementById('contact');
+        let password=document.getElementById('password');
+      
+       
+        const formData =new FormData(form);
+        const Doctor=Object.fromEntries(formData.entries());
+    
+    
+
+
+
+		
+        fetch('http://localhost:7080/api/doctor/create',{
+    
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          
+          body:JSON.stringify(Doctor)
+        })
+        .then(response => response.json())
+        .then(data=>{
+          console.log('Created successful',data);
+          alert("Registration successfull");
+          window.location.href = 'login3.html'; 
+        })
+        .catch(error =>{
+          console.error('Error registering user',error);
+        });
+    
+       });
+        //   this.reset();
+   
+
+
+
+  document.getElementById("delete").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Get the doctor ID value from the input field
+    const url = new URLSearchParams(window.location.search);
+    const d_id = url.get("d_id");
+
+    // Send a DELETE request to the API endpoint  
+    fetch(`http://localhost:7080/api/doctor/delete/${d_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(res => {
+        if (res.ok) {
+          console.log("Doctor has been deleted");
+          window.location.reload(); // Refresh the page or perform any other action
+        } else {
+          console.log("Delete unsuccessful");
+          return res;
+        }
+      })
+      .then(res => console.log(res));
+  });
+
+
+      </script>
+</body>
+
+</html>

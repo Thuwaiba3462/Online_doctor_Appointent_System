@@ -1,0 +1,119 @@
+<?php include '../../datalayer/bookserver.php'; ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Patient</title>
+	<link rel="stylesheet"  href="style2.css">
+
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+		<nav>
+		<ul> 
+			
+		
+			<!-- <li><a href=" index.html">MyInfo</a></li> -->
+			<li><a href=" book.html">Book Appointment</a></li>
+			<li><a href=" view.html">View Appointment</a></li>
+			<li><a href=" cancel.html">Cancel Booking</a></li>
+			<li><a href="searchdoctor.html">Search Doctor</a></li>
+			<li><a href="Doctorpatient.html">Logout</a></li>
+	
+		</ul>
+	</nav>
+
+</header>
+
+<body>
+
+<form id="searchForm">
+
+	<div class="input-group">
+		<label style="font-weight: bold;">Search By:<br>*Doctor Name</label>
+		<input type="text" name="name" >
+
+	</div>
+
+	<div class="input-group">
+		<button type="submit" class="btn">Search</button>
+	</div>
+		</form>
+	</form>
+	<table class="table2">
+		<tr>
+		<th>Doctor ID</th>
+		<th>Doctor Name</th>
+		<th>Address</th>
+		<th>Contact Number</th>
+		<th>Category</th>
+
+		</tr> 
+			<tr><td>
+			</td><td>
+
+			</td><td>
+
+			</td><td>
+
+			</td><td>
+
+			</td></tr>
+			
+ </table>
+<script>
+
+document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    var searchType = "name"; // Search type is always "doctorName"
+    var name = document.getElementsByName("name")[0].value;
+
+  // search logic
+    searchDoctors(searchType, name)
+        .then(function(doctors) {
+            // Clear the existing table rows
+            var table = document.querySelector(".doctor");
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+            // Populate the table with search results
+            doctors.forEach(function(doctor) {
+                var newRow = table.insertRow(-1);
+                newRow.insertCell().innerText = doctor.d_id;
+                newRow.insertCell().innerText = doctor.name;
+                newRow.insertCell().innerText = doctor.address;
+                newRow.insertCell().innerText = doctor.contact;
+                newRow.insertCell().innerText = doctor.category;
+            });
+        })
+        .catch(function(error) {
+            console.error("Error:", error);
+        });
+});
+
+function searchDoctors(searchType,name) {
+    // Example implementation of searching for doctors using an API request
+    return fetch("/search-doctors", {
+        method: "POST",
+        body: JSON.stringify({ searchType: searchType, name: name }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(function(response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("Failed to search for doctors. Please try again.");
+        }
+    });
+}
+
+</script>
+</body>
+</html>
+
+

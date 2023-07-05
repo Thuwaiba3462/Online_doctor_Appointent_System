@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Doctor</title>
+	<link rel="stylesheet"  href="style6.css">
+
+	<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<header>
+	<h1>Doctor<span>Patient</span></h1>
+	<nav>
+		<ul> 
+			<!-- <li><a href="index2.html">My Info</a></li> -->
+			<li><a href="doctorapp.html">My Appointments</a></li>
+			<li><a href="searchpatient.html">Search Patient</a></li>
+			<!-- <li><a href="add.html">Add Description</a></li> -->
+			<li><a href="Doctorpatient.html">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+
+<body>
+	<h1 class="my1">My<span class="mys">Appointments</span></h1>
+
+	<table class="table2">
+		<th>
+
+			<tr>
+				<th>Appointment ID</th>
+				<th>DATE</th>
+				<th>TIME</th>
+				<th>PatientID</th>
+				<th>PatientName</th>
+				<th>PatientAddress</th>
+				<th>PatientEmail</th>
+				<th>PatientContactNumber</th>
+				<th>BloodGroup</th>
+				<th>Action</th>
+			</tr>
+		</th>
+		
+		<tbody id="search">
+<!-- Add your dynamic data here -->
+		</tbody>
+		
+		
+	</table>
+
+	<script>
+
+fetch("http://localhost:7080/api/appointment/list")
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error("Network response not ok.");
+  })
+  .then((DATA) => {
+    let info = "";
+    DATA.forEach((item) => {
+      info += `
+        <tr>
+		<td>${item.a_id}</td>
+		<td>${item.date}</td>
+		<td>${item.time}</td>
+        <td>${item.patient.p_id}</td>
+        <td>${item.patient.name}</td>
+        <td>${item.patient.address}</td>
+		<td>${item.patient.email}</td>
+		<td>${item.patient.contact}</td>
+		<td>${item.patient.bloodtype}</td>
+		  
+		  
+          <td>
+            <button id="acceptBtn" class="accept-btn">Accept</button>
+            <button id="rejectBtn">Reject</button>
+          </td>
+        </tr>
+      `;
+    });
+    document.getElementById('search').innerHTML = info;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+	</script>
+</body>
+</html>
